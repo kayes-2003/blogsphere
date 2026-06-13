@@ -35,7 +35,7 @@ export default function AdminLayout() {
             </div>
             <span className="font-display font-bold text-lg text-white">BlogSphere</span>
           </Link>
-          <p className="text-xs text-ink-500 mt-1 ml-10">Admin Panel</p>
+          <p className="text-xs text-ink-300 mt-1 ml-10">Admin Panel</p>
         </div>
 
         {/* Nav */}
@@ -62,15 +62,15 @@ export default function AdminLayout() {
             <Avatar profile={profile} size={34} />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{profile?.full_name || 'Admin'}</p>
-              <p className="text-xs text-ink-500">Administrator</p>
+              <p className="text-xs text-ink-300">Administrator</p>
             </div>
           </div>
           <div className="flex gap-2">
-            <Link to="/" className="flex items-center gap-1 text-xs text-ink-500 hover:text-ink-300 transition-colors">
+            <Link to="/" className="flex items-center gap-1 text-xs text-ink-300 hover:text-ink-500 transition-colors">
               <ArrowLeft size={12} /> Site
             </Link>
             <span className="text-ink-700">·</span>
-            <button onClick={handleSignOut} className="flex items-center gap-1 text-xs text-ink-500 hover:text-red-400 transition-colors">
+            <button onClick={handleSignOut} className="flex items-center gap-1 text-xs text-ink-300 hover:text-ink-500 transition-colors">
               <LogOut size={12} /> Sign out
             </button>
           </div>

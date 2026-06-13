@@ -20,7 +20,7 @@ export default function About() {
     <div>
       {/* Hero */}
       <section className="section page-py text-center">
-        <span className="badge-brand mb-4 text-xs uppercase tracking-wider">Our Story</span>
+        <span className="badge-brand mb-4 text-xs uppercase tracking-wider ">Our Story</span>
         <h1 className="font-display text-5xl font-bold text-ink-900 mb-5 max-w-2xl mx-auto leading-tight">
           Built for writers who care about their craft
         </h1>
@@ -91,9 +91,9 @@ export default function About() {
       {/* CTA */}
       <section className="bg-brand-500">
         <div className="section py-14 text-center">
-          <h2 className="font-display text-3xl font-bold text-white mb-4">Join our community</h2>
-          <p className="text-brand-100 mb-7 max-w-sm mx-auto">Start writing today — it's free forever.</p>
-          <Link to="/register" className="btn bg-white text-brand-700 hover:bg-brand-50 btn-lg">
+          <h2 className="font-display text-3xl font-bold text-black mb-4">Join our community</h2>
+          <p className="text-black mb-7 max-w-sm mx-auto">Start writing today — it's free forever.</p>
+          <Link to="/register" className="btn bg-white text-black hover:bg-brand-50 btn-lg">
             Create account <ArrowRight size={18} />
           </Link>
         </div>
