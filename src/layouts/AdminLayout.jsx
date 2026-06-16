@@ -1,5 +1,5 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
-import { LayoutDashboard, FileText, Users, MessageSquare, PenLine, ArrowLeft, LogOut } from 'lucide-react'
+import { LayoutDashboard, FileText, Users, MessageSquare, PenLine, ArrowLeft, LogOut, UserCog } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { authService } from '@/services/authService'
 import { useNavigate } from 'react-router-dom'
@@ -11,6 +11,7 @@ const navItems = [
   { to: '/admin/posts',    label: 'Posts',     icon: FileText },
   { to: '/admin/users',    label: 'Users',     icon: Users },
   { to: '/admin/comments', label: 'Comments',  icon: MessageSquare },
+  { to: '/admin/team',     label: 'Team',      icon: UserCog },
 ]
 
 export default function AdminLayout() {
@@ -27,7 +28,6 @@ export default function AdminLayout() {
     <div className="min-h-screen flex bg-ink-50">
       {/* ── Sidebar ── */}
       <aside className="w-60 bg-ink-900 flex flex-col flex-shrink-0 fixed inset-y-0 left-0 z-30">
-        {/* Brand */}
         <div className="px-5 py-5 border-b border-ink-800">
           <Link to="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
@@ -35,10 +35,9 @@ export default function AdminLayout() {
             </div>
             <span className="font-display font-bold text-lg text-white">BlogSphere</span>
           </Link>
-          <p className="text-xs text-ink-300 mt-1 ml-10">Admin Panel</p>
+          <p className="text-xs text-ink-500 mt-1 ml-10">Admin Panel</p>
         </div>
 
-        {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           {navItems.map(({ to, label, icon: Icon, end }) => (
             <NavLink
@@ -56,28 +55,27 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        {/* Footer */}
         <div className="px-4 py-4 border-t border-ink-800 space-y-3">
           <div className="flex items-center gap-2.5">
             <Avatar profile={profile} size={34} />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{profile?.full_name || 'Admin'}</p>
-              <p className="text-xs text-ink-300">Administrator</p>
+              <p className="text-xs text-ink-500">Administrator</p>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Link to="/" className="flex items-center gap-1 text-xs text-ink-300 hover:text-ink-500 transition-colors">
+          <div className="flex gap-3">
+            <Link to="/" className="flex items-center gap-1 text-xs text-ink-500 hover:text-ink-300 transition-colors">
               <ArrowLeft size={12} /> Site
             </Link>
             <span className="text-ink-700">·</span>
-            <button onClick={handleSignOut} className="flex items-center gap-1 text-xs text-ink-300 hover:text-ink-500 transition-colors">
+            <button onClick={handleSignOut} className="flex items-center gap-1 text-xs text-ink-500 hover:text-red-400 transition-colors">
               <LogOut size={12} /> Sign out
             </button>
           </div>
         </div>
       </aside>
 
-      {/* ── Main content ── */}
+      {/* ── Main ── */}
       <div className="flex-1 ml-60 flex flex-col min-h-screen">
         <main className="flex-1 p-6 lg:p-8 overflow-auto">
           <Outlet />

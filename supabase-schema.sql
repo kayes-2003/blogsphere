@@ -185,3 +185,35 @@ create policy "Users can upload own avatar"
 create policy "Users can update own avatar"
   on storage.objects for update
   using (bucket_id = 'avatars' and auth.uid() is not null);
+
+-- ── Team Members ──────────────────────────────────────────────
+create table if not exists public.team_members (
+  id         uuid primary key default uuid_generate_v4(),
+  name       text not null,
+  role       text not null,
+  bio        text,
+  avatar_url text,
+  twitter    text,
+  linkedin   text,
+  sort_order int default 0,
+  visible    boolean default true,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table public.team_members enable row level security;
+
+create policy "Team members are public"
+  on public.team_members for select using (visible = true);
+
+create policy "Admins manage team members"
+  on public.team_members for all
+  using ((select role from public.profiles where id = auth.uid()) = 'admin');
+
+-- Seed initial team
+insert into public.team_members (name, role, bio, avatar_url, sort_order) values
+  ('Sarah Chen',  'Founder & CEO',    'Passionate about making writing accessible to everyone.', 'https://i.pravatar.cc/150?img=47', 1),
+  ('Marcus Webb', 'Lead Engineer',    'Building fast, reliable systems for writers worldwide.',  'https://i.pravatar.cc/150?img=12', 2),
+  ('Aisha Patel', 'Head of Design',   'Crafting beautiful experiences one pixel at a time.',     'https://i.pravatar.cc/150?img=48', 3),
+  ('David Kim',   'Community Manager','Connecting writers and helping communities thrive.',       'https://i.pravatar.cc/150?img=15', 4)
+on conflict do nothing;

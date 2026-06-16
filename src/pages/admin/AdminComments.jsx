@@ -133,7 +133,7 @@ export default function AdminComments() {
                       <Clock size={10} /> {timeAgo(comment.created_at)}
                     </span>
                     {comment.approved
-                      ? <span className="badge badge-black">"approved"</span>
+                      ? <span className="badge badge-green">approved</span>
                       : <span className="badge badge-yellow">pending</span>
                     }
                     {comment.post && (
