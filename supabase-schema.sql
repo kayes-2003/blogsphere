@@ -1,12 +1,5 @@
--- ═══════════════════════════════════════════════════════════════
--- BlogSphere — Supabase Schema
--- Run this in: Supabase Dashboard → SQL Editor → New Query
--- ═══════════════════════════════════════════════════════════════
-
--- ── Extensions ────────────────────────────────────────────────
 create extension if not exists "uuid-ossp";
 
--- ── Profiles ──────────────────────────────────────────────────
 create table if not exists public.profiles (
   id          uuid primary key references auth.users(id) on delete cascade,
   full_name   text,
@@ -46,7 +39,6 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
--- ── Categories ────────────────────────────────────────────────
 create table if not exists public.categories (
   id         uuid primary key default uuid_generate_v4(),
   name       text not null unique,
@@ -72,7 +64,7 @@ insert into public.categories (name, slug) values
   ('Personal',       'personal')
 on conflict do nothing;
 
--- ── Posts ─────────────────────────────────────────────────────
+-- ── Posts
 create table if not exists public.posts (
   id           uuid primary key default uuid_generate_v4(),
   author_id    uuid not null references public.profiles(id) on delete cascade,
@@ -124,7 +116,7 @@ create index if not exists posts_slug_idx on public.posts (slug);
 create index if not exists posts_author_idx on public.posts (author_id);
 create index if not exists posts_status_idx on public.posts (status);
 
--- ── Comments ──────────────────────────────────────────────────
+-- ── Comments 
 create table if not exists public.comments (
   id         uuid primary key default uuid_generate_v4(),
   post_id    uuid not null references public.posts(id) on delete cascade,
@@ -152,7 +144,7 @@ create policy "Admins manage all comments"
   on public.comments for all
   using ((select role from public.profiles where id = auth.uid()) = 'admin');
 
--- ── Storage buckets ───────────────────────────────────────────
+-- ── Storage buckets 
 -- Run these in the Supabase Storage section OR via SQL:
 insert into storage.buckets (id, name, public)
   values ('blog-images', 'blog-images', true)
@@ -186,7 +178,7 @@ create policy "Users can update own avatar"
   on storage.objects for update
   using (bucket_id = 'avatars' and auth.uid() is not null);
 
--- ── Team Members ──────────────────────────────────────────────
+-- ── Team Members 
 create table if not exists public.team_members (
   id         uuid primary key default uuid_generate_v4(),
   name       text not null,
