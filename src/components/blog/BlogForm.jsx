@@ -43,7 +43,7 @@ export default function BlogForm({ initialData = null, onSave, saving = false })
   }
 
   const wordCount = form.content.replace(/<[^>]+>/g, '').trim().split(/\s+/).filter(Boolean).length
-  const readTime  = Math.max(1, Math.round(wordCount / 200))
+  const readTime  = Math.max(1, Math.round(wordCount / 100))
 
   const handleSubmit = (status) => {
     if (!form.title.trim()) { toast.error('Title is required'); return }

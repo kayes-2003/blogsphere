@@ -132,7 +132,7 @@ export default function RichEditor({ value, onChange, placeholder = 'Write your 
       <div className="bg-ink-50 border-t border-ink-100 px-4 py-1.5 flex items-center justify-end gap-3">
         <span className="text-xs text-ink-400">{wordCount} words</span>
         <span className="text-xs text-ink-300">·</span>
-        <span className="text-xs text-ink-400">~{Math.max(1, Math.round(wordCount / 200))} min read</span>
+        <span className="text-xs text-ink-400">~{Math.max(1, Math.round(wordCount / 100))} min read</span>
       </div>
     </div>
   )

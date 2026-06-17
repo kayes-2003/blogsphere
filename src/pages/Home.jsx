@@ -33,7 +33,7 @@ export default function Home() {
               BlogSphere is where thoughtful writers publish, grow an audience, and connect with readers who care.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link to="/register" className="btn-brand btn-lg">
+              <Link to="/register" className="btn-brand btn-lg border border-ink-700">
                 Start writing free <ArrowRight size={18} />
               </Link>
               <Link to="/blogs" className="btn btn-lg border border-ink-700 text-ink-200 hover:bg-ink-800">
@@ -53,7 +53,7 @@ export default function Home() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {features.map(({ icon, title, desc }) => (
             <div key={title} className="flex flex-col gap-3">
-              <div className="w-11 h-11 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600">
+              <div className="w-11 h-11 rounded-xl bg-brand-50 flex items-center justify-center text-black">
                 {icon}
               </div>
               <div>
@@ -85,7 +85,7 @@ export default function Home() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-brand-500">
+      <section className="bg-green-700">
         <div className="section py-14 text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to share your story?
@@ -93,7 +93,7 @@ export default function Home() {
           <p className="text-brand-100 mb-7 max-w-md mx-auto">
             Join thousands of writers who trust BlogSphere to reach their audience.
           </p>
-          <Link to="/register" className="btn bg-white text-brand-700 hover:bg-brand-50 btn-lg">
+          <Link to="/register" className="btn bg-white text-brand-700 hover:bg-green-400 btn-lg">
             Create free account <ArrowRight size={18} />
           </Link>
         </div>

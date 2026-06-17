@@ -2,7 +2,7 @@ export default function Spinner({ size = 'md', fullPage = false }) {
   const sizes = { sm: 'w-5 h-5 border-2', md: 'w-9 h-9 border-4', lg: 'w-14 h-14 border-4' }
 
   const el = (
-    <div className={`${sizes[size]} border-brand-100 border-t-brand-500 rounded-full animate-spin`} />
+    <div className={`${sizes[size]} border-brand-100 border-t-brand-800 aspect-square animate-spin`} />
   )
 
   if (fullPage) {

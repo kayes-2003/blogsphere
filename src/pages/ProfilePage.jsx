@@ -50,7 +50,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="section page-py max-w-2xl mx-auto">
+    <div className="section page-py max-w-2xl mx-auto ">
       <h1 className="font-display text-3xl font-bold text-ink-900 mb-8">My Profile</h1>
 
       <div className="card p-8 space-y-8">

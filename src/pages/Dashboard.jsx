@@ -45,7 +45,7 @@ export default function Dashboard() {
               <div key={label} className="card p-5">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-medium text-ink-500 uppercase tracking-wide">{label}</span>
-                  <div className="text-brand-500">{icon}</div>
+                  <div className="text-black">{icon}</div>
                 </div>
                 <p className="font-display text-3xl font-bold text-ink-900">{value}</p>
               </div>

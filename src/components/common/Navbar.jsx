@@ -41,7 +41,7 @@ export default function Navbar() {
 
           {/* ── Logo ── */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-ink-900 rounded-lg flex items-center justify-center group-hover:bg-brand-600 transition-colors">
+            <div className="w-8 h-8 bg-ink-900 rounded-lg flex items-center justify-center group-hover:bg-green-700 transition-colors">
               <PenLine size={15} className="text-white" />
             </div>
             <span className="font-display font-bold text-xl text-ink-900">BlogSphere</span>

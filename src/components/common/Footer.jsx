@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <Link to="/" className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center">
                 <PenLine size={15} className="text-white" />
               </div>
               <span className="font-display font-bold text-xl text-white">BlogSphere</span>
@@ -26,7 +26,7 @@ export default function Footer() {
                 { href: '/rss',                icon: <Rss     size={15} /> },
               ].map(({ href, icon }) => (
                 <a key={href} href={href} target="_blank" rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-lg bg-ink-800 hover:bg-brand-600 flex items-center justify-center transition-colors text-ink-400 hover:text-white">
+                  className="w-8 h-8 rounded-lg bg-ink-800 hover:bg-gren-700 flex items-center justify-center transition-colors text-ink-400 hover:text-white">
                   {icon}
                 </a>
               ))}

@@ -26,7 +26,7 @@ export default function Blogs() {
   }
 
   return (
-    <div className="section page-py">
+    <div className="section page-py ">
       {/* Header */}
       <div className="mb-10">
         <h1 className="font-display text-4xl md:text-5xl font-bold text-ink-900 mb-2">All Posts</h1>
@@ -53,7 +53,7 @@ export default function Blogs() {
 
         {categories.length > 0 && (
           <div className="flex items-center gap-2 flex-wrap">
-            <Filter size={14} className="text-ink-400 flex-shrink-0" />
+            <Filter size={20} className="text-ink-400 flex-shrink-0" />
             <button
               onClick={() => handleCategory('')}
               className={`badge cursor-pointer transition-colors ${

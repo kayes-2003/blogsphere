@@ -76,7 +76,7 @@ export default function About() {
               BlogSphere gives writers everything they need — a powerful editor, a growing audience,
               and tools to manage their presence — without getting in the way.
             </p>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 ">
               {[
                 { icon: <PenLine size={18} />,  text: 'A writing experience that respects your focus' },
                 { icon: <Users size={18} />,    text: 'Community tools that build real connections' },
@@ -84,14 +84,14 @@ export default function About() {
                 { icon: <Heart size={18} />,    text: 'No ads. No noise. Just great writing.' },
               ].map(({ icon, text }) => (
                 <div key={text} className="flex items-start sm:items-center gap-3 text-sm text-ink-600">
-                  <div className="text-brand-500 flex-shrink-0 mt-0.5 sm:mt-0">{icon}</div>
+                  <div className="text-black flex-shrink-0 mt-0.5 sm:mt-0">{icon}</div>
                   <span>{text}</span>
                 </div>
               ))}
             </div>
           </div>
           <div className="bg-gradient-to-br from-brand-50 to-ink-50 rounded-2xl p-8 sm:p-10 flex items-center justify-center aspect-square max-w-sm mx-auto w-full">
-            <PenLine size={64} className="sm:w-20 sm:h-20 text-brand-400 opacity-40" />
+            <PenLine size={64} className="sm:w-20 sm:h-20 text-black opacity-30" />
           </div>
         </div>
       </section>
@@ -120,11 +120,11 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="bg-brand-500">
+      <section className="bg-green-700">
         <div className="section py-12 sm:py-14 text-center px-4">
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-white mb-4">Join our community</h2>
           <p className="text-brand-100 mb-7 max-w-sm mx-auto text-sm sm:text-base">Start writing today — it's free forever.</p>
-          <Link to="/register" className="btn bg-white text-brand-700 hover:bg-brand-50 btn-lg">
+          <Link to="/register" className="btn bg-white text-brand-700 hover:bg-green-400 btn-lg">
             Create account <ArrowRight size={18} />
           </Link>
         </div>
