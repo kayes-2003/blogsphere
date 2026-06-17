@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { Image, Eye, Save, Send, X } from 'lucide-react'
 import { useCategories } from '@/hooks/useCategories'
 import { blogService } from '@/services/blogService'
-import { toSlug, calcReadTime } from '@/utils/helpers'
+import { toSlug } from '@/utils/helpers'
+import RichEditor from './RichEditor'
 import toast from 'react-hot-toast'
 
 export default function BlogForm({ initialData = null, onSave, saving = false }) {
@@ -21,7 +22,6 @@ export default function BlogForm({ initialData = null, onSave, saving = false })
   const [uploading, setUploading] = useState(false)
   const [preview,   setPreview]   = useState(false)
 
-  // Auto-generate slug from title (only when creating)
   useEffect(() => {
     if (!initialData && form.title) {
       setForm(f => ({ ...f, slug: toSlug(f.title) }))
@@ -29,6 +29,7 @@ export default function BlogForm({ initialData = null, onSave, saving = false })
   }, [form.title, initialData])
 
   const set = (field) => (e) => setForm(f => ({ ...f, [field]: e.target.value }))
+  const handleContent = (html) => setForm(f => ({ ...f, content: html }))
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0]
@@ -41,27 +42,32 @@ export default function BlogForm({ initialData = null, onSave, saving = false })
     setUploading(false)
   }
 
-  const handleSubmit = (status) => {
-    if (!form.title.trim())   { toast.error('Title is required');   return }
-    if (!form.content.trim()) { toast.error('Content is required'); return }
+  const wordCount = form.content.replace(/<[^>]+>/g, '').trim().split(/\s+/).filter(Boolean).length
+  const readTime  = Math.max(1, Math.round(wordCount / 200))
 
-    const readTime = calcReadTime(form.content)
-    const payload  = {
-      ...form,
-      status,
-      read_time:    readTime,
-      published_at: status === 'published' ? new Date().toISOString() : form.published_at || null,
-    }
-    onSave(payload, status)
+  const handleSubmit = (status) => {
+    if (!form.title.trim()) { toast.error('Title is required'); return }
+    if (!form.content.replace(/<[^>]+>/g, '').trim()) { toast.error('Content is required'); return }
+    onSave({
+      ...form, status, read_time: readTime,
+      published_at: status === 'published'
+        ? (form.published_at || new Date().toISOString())
+        : form.published_at || null,
+    }, status)
   }
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Toolbar */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-bold text-ink-900">
-          {initialData ? 'Edit Post' : 'New Post'}
-        </h1>
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div className="flex items-center gap-3">
+          <h1 className="font-display text-2xl font-bold text-ink-900">
+            {initialData ? 'Edit Post' : 'New Post'}
+          </h1>
+          {wordCount > 0 && (
+            <span className="badge-ink text-xs">{wordCount} words · {readTime} min read</span>
+          )}
+        </div>
         <div className="flex items-center gap-2">
           <button type="button" onClick={() => setPreview(!preview)} className="btn-outline btn-sm">
             <Eye size={14} /> {preview ? 'Edit' : 'Preview'}
@@ -76,17 +82,26 @@ export default function BlogForm({ initialData = null, onSave, saving = false })
       </div>
 
       {preview ? (
-        /* ── Preview ── */
-        <div className="card p-8">
+        <div className="card p-8 lg:p-12">
           {form.cover_image && (
-            <img src={form.cover_image} alt="Cover" className="w-full rounded-xl mb-6 aspect-video object-cover" />
+            <img src={form.cover_image} alt="Cover" className="w-full rounded-xl mb-8 aspect-video object-cover" />
           )}
-          <h1 className="font-display text-4xl font-bold text-ink-900 mb-3">{form.title || 'Untitled'}</h1>
-          {form.excerpt && <p className="text-lg text-ink-500 mb-6 italic">{form.excerpt}</p>}
-          <div className="blog-content" dangerouslySetInnerHTML={{ __html: form.content.replace(/\n/g, '<br/>') }} />
+          {form.category_id && (
+            <span className="badge-brand mb-4 inline-block">
+              {categories.find(c => c.id === form.category_id)?.name}
+            </span>
+          )}
+          <h1 className="font-display text-4xl font-bold text-ink-900 mb-4 leading-tight">
+            {form.title || 'Untitled'}
+          </h1>
+          {form.excerpt && (
+            <p className="text-lg text-ink-500 mb-8 italic border-l-4 border-brand-300 pl-4">
+              {form.excerpt}
+            </p>
+          )}
+          <div className="blog-content" dangerouslySetInnerHTML={{ __html: form.content }} />
         </div>
       ) : (
-        /* ── Edit form ── */
         <div className="space-y-5">
           {/* Cover image */}
           <div>
@@ -102,10 +117,12 @@ export default function BlogForm({ initialData = null, onSave, saving = false })
                 </button>
               </div>
             ) : (
-              <label className="block">
-                <div className="border-2 border-dashed border-ink-200 hover:border-brand-400 rounded-xl p-10 text-center cursor-pointer transition-colors group">
+              <label className="block cursor-pointer">
+                <div className="border-2 border-dashed border-ink-200 hover:border-brand-400 rounded-xl p-10 text-center transition-colors group">
                   <Image size={32} className="mx-auto mb-2 text-ink-300 group-hover:text-brand-400 transition-colors" />
-                  <p className="text-sm text-ink-500 font-medium">{uploading ? 'Uploading…' : 'Click to upload cover image'}</p>
+                  <p className="text-sm text-ink-500 font-medium">
+                    {uploading ? 'Uploading…' : 'Click to upload cover image'}
+                  </p>
                   <p className="text-xs text-ink-400 mt-1">PNG, JPG, WebP · max 5 MB</p>
                 </div>
                 <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
@@ -114,37 +131,25 @@ export default function BlogForm({ initialData = null, onSave, saving = false })
           </div>
 
           {/* Title */}
-          <div>
-            <textarea
-              value={form.title}
-              onChange={set('title')}
-              placeholder="Your post title…"
-              rows={2}
-              className="w-full font-display text-3xl font-bold text-ink-900 placeholder-ink-300 border-0 border-b-2 border-ink-100 focus:border-brand-400 focus:outline-none resize-none py-2 bg-transparent transition-colors"
-            />
-          </div>
+          <textarea
+            value={form.title}
+            onChange={set('title')}
+            placeholder="Your post title…"
+            rows={2}
+            className="w-full font-display text-3xl font-bold text-ink-900 placeholder-ink-200 border-0 border-b-2 border-ink-100 focus:border-brand-400 focus:outline-none resize-none py-2 bg-transparent transition-colors leading-snug"
+          />
 
           {/* Slug */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-ink-400">/blogs/</span>
-            <input
-              value={form.slug}
-              onChange={set('slug')}
-              placeholder="post-slug"
-              className="input flex-1 text-sm font-mono"
-            />
+            <span className="text-sm text-ink-400 flex-shrink-0">/blogs/</span>
+            <input value={form.slug} onChange={set('slug')} placeholder="post-slug" className="input flex-1 text-sm font-mono" />
           </div>
 
           {/* Excerpt */}
           <div>
-            <label className="label">Excerpt <span className="text-ink-400 font-normal">(shown in cards)</span></label>
-            <textarea
-              value={form.excerpt}
-              onChange={set('excerpt')}
-              placeholder="A short summary of your post…"
-              rows={2}
-              className="input resize-none"
-            />
+            <label className="label">Excerpt <span className="text-ink-400 font-normal">(shown in post cards)</span></label>
+            <textarea value={form.excerpt} onChange={set('excerpt')} placeholder="A short summary…" rows={2} maxLength={200} className="input resize-none" />
+            <p className="text-xs text-ink-400 mt-1 text-right">{form.excerpt.length}/200</p>
           </div>
 
           {/* Category */}
@@ -152,21 +157,17 @@ export default function BlogForm({ initialData = null, onSave, saving = false })
             <label className="label">Category</label>
             <select value={form.category_id} onChange={set('category_id')} className="input">
               <option value="">— Select a category —</option>
-              {categories.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
+              {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </div>
 
-          {/* Content */}
+          {/* Rich editor */}
           <div>
-            <label className="label">Content <span className="text-ink-400 font-normal">(HTML or plain text supported)</span></label>
-            <textarea
+            <label className="label mb-2">Content <span className="text-ink-400 font-normal">— use the toolbar to format</span></label>
+            <RichEditor
               value={form.content}
-              onChange={set('content')}
-              placeholder="Write your post here…"
-              rows={20}
-              className="input font-mono text-sm resize-y leading-relaxed"
+              onChange={handleContent}
+              placeholder="Start writing… use the toolbar for headings, bold, lists, links and more."
             />
           </div>
         </div>

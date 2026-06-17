@@ -51,86 +51,109 @@ export default function AdminPosts() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
-          <h1 className="font-display text-2xl font-bold text-ink-900">All Posts</h1>
+          <h1 className="font-display text-xl sm:text-2xl font-bold text-ink-900">All Posts</h1>
           <p className="text-ink-500 text-sm mt-0.5">{count} total posts</p>
         </div>
-        <button onClick={fetchPosts} className="btn-outline btn-sm"><RefreshCw size={13} /> Refresh</button>
+        <button onClick={fetchPosts} className="btn-outline btn-sm self-start sm:self-auto"><RefreshCw size={13} /> Refresh</button>
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-xs mb-5">
+      <div className="relative w-full sm:max-w-xs mb-5">
         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-400" />
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Filter by title…"
-          className="input pl-8 text-sm"
+          className="input pl-8 text-sm w-full"
         />
       </div>
 
       {loading ? <Spinner /> : filtered.length === 0 ? (
         <EmptyState icon={null} title="No posts found" />
       ) : (
-        <div className="card overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-ink-50 border-b border-ink-100">
-              <tr>
-                <th className="text-left px-5 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide">Title</th>
-                <th className="text-left px-3 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide hidden sm:table-cell">Author</th>
-                <th className="text-left px-3 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide hidden md:table-cell">Status</th>
-                <th className="text-left px-3 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide hidden lg:table-cell">Date</th>
-                <th className="text-left px-3 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide hidden lg:table-cell">Views</th>
-                <th className="px-5 py-3" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-ink-50">
-              {filtered.map(post => (
-                <tr key={post.id} className="hover:bg-ink-50/40 transition-colors">
-                  <td className="px-5 py-3.5">
-                    <p className="font-medium text-ink-900 truncate max-w-[220px]">{post.title}</p>
-                    <p className="text-xs text-ink-400 mt-0.5 sm:hidden">{post.author?.full_name}</p>
-                  </td>
-                  <td className="px-3 py-3.5 text-ink-600 hidden sm:table-cell truncate max-w-[140px]">{post.author?.full_name}</td>
-                  <td className="px-3 py-3.5 hidden md:table-cell">
-                    <span className={`badge ${post.status === 'published' ? 'badge-green' : 'badge-yellow'}`}>
-                      {post.status}
-                    </span>
-                  </td>
-                  <td className="px-3 py-3.5 text-ink-500 hidden lg:table-cell whitespace-nowrap">
-                    {formatDate(post.created_at)}
-                  </td>
-                  <td className="px-3 py-3.5 text-ink-500 hidden lg:table-cell">{post.views ?? 0}</td>
-                  <td className="px-5 py-3.5">
-                    <div className="flex items-center gap-1 justify-end">
-                      {post.status === 'published' && (
-                        <Link to={`/blogs/${post.slug}`} target="_blank"
-                          className="p-1.5 rounded-lg text-ink-400 hover:text-brand-600 hover:bg-brand-50 transition-colors" title="View">
-                          <Eye size={14} />
-                        </Link>
-                      )}
-                      <button onClick={() => handleToggleStatus(post)}
-                        className="p-1.5 rounded-lg text-ink-400 hover:text-green-600 hover:bg-green-50 transition-colors"
-                        title={post.status === 'published' ? 'Unpublish' : 'Publish'}>
-                        {post.status === 'published' ? <XCircle size={14} /> : <CheckCircle size={14} />}
-                      </button>
-                      <Link to={`/blogs/${post.id}/edit`}
-                        className="p-1.5 rounded-lg text-ink-400 hover:text-ink-700 hover:bg-ink-100 transition-colors" title="Edit">
-                        <Pencil size={14} />
+        <>
+          {/* ── Mobile cards ── */}
+          <div className="sm:hidden space-y-3">
+            {filtered.map(post => (
+              <div key={post.id} className="card p-4">
+                <p className="font-medium text-ink-900 text-sm mb-1 leading-snug">{post.title}</p>
+                <p className="text-xs text-ink-400 mb-2">{post.author?.full_name} · {formatDate(post.created_at)}</p>
+                <div className="flex items-center justify-between">
+                  <span className={`badge text-[10px] ${post.status === 'published' ? 'badge-green' : 'badge-yellow'}`}>
+                    {post.status}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    {post.status === 'published' && (
+                      <Link to={`/blogs/${post.slug}`} target="_blank" className="p-1.5 rounded-lg text-ink-400 hover:text-brand-600 hover:bg-brand-50">
+                        <Eye size={14} />
                       </Link>
-                      <button onClick={() => setDeleting(post.id)}
-                        className="p-1.5 rounded-lg text-ink-400 hover:text-red-600 hover:bg-red-50 transition-colors" title="Delete">
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  </td>
+                    )}
+                    <button onClick={() => handleToggleStatus(post)} className="p-1.5 rounded-lg text-ink-400 hover:text-green-600 hover:bg-green-50">
+                      {post.status === 'published' ? <XCircle size={14} /> : <CheckCircle size={14} />}
+                    </button>
+                    <Link to={`/blogs/${post.id}/edit`} className="p-1.5 rounded-lg text-ink-400 hover:text-ink-700 hover:bg-ink-100">
+                      <Pencil size={14} />
+                    </Link>
+                    <button onClick={() => setDeleting(post.id)} className="p-1.5 rounded-lg text-ink-400 hover:text-red-600 hover:bg-red-50">
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ── Desktop table ── */}
+          <div className="hidden sm:block card overflow-x-auto">
+            <table className="w-full text-sm min-w-[700px]">
+              <thead className="bg-ink-50 border-b border-ink-100">
+                <tr>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide">Title</th>
+                  <th className="text-left px-3 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide">Author</th>
+                  <th className="text-left px-3 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide hidden md:table-cell">Status</th>
+                  <th className="text-left px-3 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide hidden lg:table-cell">Date</th>
+                  <th className="text-left px-3 py-3 text-xs font-semibold text-ink-500 uppercase tracking-wide hidden lg:table-cell">Views</th>
+                  <th className="px-5 py-3" />
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-ink-50">
+                {filtered.map(post => (
+                  <tr key={post.id} className="hover:bg-ink-50/40 transition-colors">
+                    <td className="px-5 py-3.5">
+                      <p className="font-medium text-ink-900 truncate max-w-[200px]">{post.title}</p>
+                    </td>
+                    <td className="px-3 py-3.5 text-ink-600 truncate max-w-[140px]">{post.author?.full_name}</td>
+                    <td className="px-3 py-3.5 hidden md:table-cell">
+                      <span className={`badge ${post.status === 'published' ? 'badge-green' : 'badge-yellow'}`}>{post.status}</span>
+                    </td>
+                    <td className="px-3 py-3.5 text-ink-500 hidden lg:table-cell whitespace-nowrap">{formatDate(post.created_at)}</td>
+                    <td className="px-3 py-3.5 text-ink-500 hidden lg:table-cell">{post.views ?? 0}</td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-1 justify-end">
+                        {post.status === 'published' && (
+                          <Link to={`/blogs/${post.slug}`} target="_blank" className="p-1.5 rounded-lg text-ink-400 hover:text-brand-600 hover:bg-brand-50 transition-colors">
+                            <Eye size={14} />
+                          </Link>
+                        )}
+                        <button onClick={() => handleToggleStatus(post)} className="p-1.5 rounded-lg text-ink-400 hover:text-green-600 hover:bg-green-50 transition-colors">
+                          {post.status === 'published' ? <XCircle size={14} /> : <CheckCircle size={14} />}
+                        </button>
+                        <Link to={`/blogs/${post.id}/edit`} className="p-1.5 rounded-lg text-ink-400 hover:text-ink-700 hover:bg-ink-100 transition-colors">
+                          <Pencil size={14} />
+                        </Link>
+                        <button onClick={() => setDeleting(post.id)} className="p-1.5 rounded-lg text-ink-400 hover:text-red-600 hover:bg-red-50 transition-colors">
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       <Pagination page={page} totalPages={Math.ceil(count / limit)} onChange={p => { setPage(p); fetchPosts() }} />

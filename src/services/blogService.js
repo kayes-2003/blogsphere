@@ -55,16 +55,30 @@ export const blogService = {
 
   /** Create a new post */
   async createPost(post) {
-    const { data, error } = await supabase.from('posts').insert(post).select().single()
-    return { data, error }
-  },
+  const { category, author, tags, ...cleanPost } = post
+
+  const { data, error } = await supabase
+    .from('posts')
+    .insert(cleanPost)
+    .select()
+    .single()
+  return { data, error }
+},
 
   /** Update an existing post */
   async updatePost(id, updates) {
-    const { data, error } = await supabase.from('posts').update(updates).eq('id', id).select().single()
-    return { data, error }
-  },
+  // Remove joined relations that Supabase doesn't accept as columns
+  const { category, author, tags, ...cleanUpdates } = updates
 
+  const { data, error } = await supabase
+    .from('posts')
+    .update(cleanUpdates)
+    .eq('id', id)
+    .select()
+    .single()
+  return { data, error }
+
+},
   /** Delete a post */
   async deletePost(id) {
     const { error } = await supabase.from('posts').delete().eq('id', id)
