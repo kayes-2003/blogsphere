@@ -1,7 +1,24 @@
-# BlogSphere 🖊️
+# 🖊️ BlogSphere
 
-A modern full-stack blogging platform built with **React 18**, **Tailwind CSS**, and **Supabase**.
+> A modern full-stack blogging platform built with React, Tailwind CSS, and Supabase — featuring secure authentication, role-based admin management, rich text editing, image uploads, and a fully responsive experience.
 
+**🔗 Live Demo:** [blogsphere-t5id.vercel.app](https://blogsphere-t5id.vercel.app/)
+
+---
+
+## 📸 Screenshots
+
+| Home | About |
+|---|---|
+| ![Home]([laptop]!(image.png)/![mobile](image-2.png)) | ![About](![laptop](image-1.png))/![mobile](image-3.png) |
+
+| Blog Editor | Admin Dashboard |
+|---|---|
+| ![Editor](![laptop](![alt text](image-6.png))) | ![Admin](image-5.png)/![mobile](image-4.png) |
+
+> *Add your screenshots to a `/screenshots` folder in the repo root, matching the filenames above.*
+
+---
 ## Features
 
 - 🔐 Secure authentication (sign up / sign in / sign out)
